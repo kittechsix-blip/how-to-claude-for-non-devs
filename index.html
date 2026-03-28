@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="How to Claude">
+<meta name="theme-color" content="#0f0f14">
+<meta name="description" content="Learn everything about Claude and AI — explained with zero jargon and real-world examples anyone can relate to.">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>How to Claude — for Non-Devs</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f0f14;--surface:#1a1a22;--surface2:#24242f;--surface3:#2e2e3a;
+  --text:#f0eff4;--muted:#8b8a94;--accent:#e85d26;--accent-glow:rgba(232,93,38,.15);
+  --green:#34d399;--blue:#60a5fa;--purple:#a78bfa;--pink:#f472b6;
+  --yellow:#fbbf24;--teal:#2dd4bf;--red:#f87171;
+  --radius:16px;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);
+}
+html{-webkit-tap-highlight-color:transparent;scroll-behavior:smooth}
+body{
+  font-family:'Inter',-apple-system,system-ui,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;
+  min-height:100dvh;padding-top:var(--safe-top);padding-bottom:var(--safe-bottom);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ===== INSTALL BANNER ===== */
+.install-banner{display:none;padding:12px 20px}
+.install-banner.show{display:block}
+.install-inner{
+  background:var(--accent-glow);border:1px solid rgba(232,93,38,.3);
+  border-radius:12px;padding:12px 16px;display:flex;align-items:center;
+  justify-content:space-between;gap:10px;
+}
+.install-inner p{font-size:13px;color:var(--accent);font-weight:500}
+.install-btn{
+  padding:7px 16px;border-radius:100px;border:none;background:var(--accent);
+  color:#fff;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;
+}
+.install-dismiss{background:none;border:none;color:var(--accent);font-size:18px;cursor:pointer;padding:2px;line-height:1}
+
+/* ===== HERO ===== */
+.hero{
+  text-align:center;padding:56px 24px 40px;
+  background:radial-gradient(ellipse at 50% 0%,rgba(232,93,38,.08) 0%,transparent 70%);
+}
+.hero-logo{
+  width:64px;height:64px;border-radius:18px;margin:0 auto 20px;
+  background:linear-gradient(135deg,var(--accent),#ff8a50);
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;font-weight:900;color:#fff;letter-spacing:-1px;
+  box-shadow:0 8px 32px rgba(232,93,38,.3);
+}
+.hero h1{
+  font-size:clamp(1.6rem,5vw,2.5rem);font-weight:800;line-height:1.15;
+  margin-bottom:8px;letter-spacing:-.5px;
+}
+.hero h1 span{
+  background:linear-gradient(135deg,var(--accent),#ff8a50);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero p{font-size:15px;color:var(--muted);max-width:420px;margin:0 auto}
+
+/* ===== STATS ROW ===== */
+.stats{
+  display:flex;justify-content:center;gap:28px;padding:20px 24px 8px;
+}
+.stat{text-align:center}
+.stat-num{font-size:22px;font-weight:800;color:var(--accent)}
+.stat-label{font-size:11px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+
+/* ===== CATEGORY TABS ===== */
+.tabs-wrap{
+  padding:24px 20px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.tabs-wrap::-webkit-scrollbar{display:none}
+.tabs{display:flex;gap:6px;min-width:max-content}
+.tab{
+  padding:8px 18px;border-radius:100px;font-family:inherit;font-size:13px;
+  font-weight:600;cursor:pointer;transition:all .2s;border:1.5px solid var(--surface3);
+  background:var(--surface);color:var(--muted);white-space:nowrap;
+  user-select:none;-webkit-user-select:none;
+}
+.tab:hover{border-color:var(--accent);color:var(--text)}
+.tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.tab .tab-count{
+  display:inline-block;background:rgba(255,255,255,.15);border-radius:100px;
+  padding:1px 7px;font-size:11px;margin-left:4px;
+}
+.tab:not(.active) .tab-count{background:var(--surface3)}
+
+/* ===== CARD GRID ===== */
+.grid-section{padding:16px 20px 40px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+
+.card{
+  background:var(--surface);border:1px solid var(--surface3);
+  border-radius:var(--radius);padding:24px;cursor:pointer;
+  transition:all .25s;position:relative;overflow:hidden;
+  text-decoration:none;color:inherit;display:block;
+}
+.card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.card:active{transform:scale(.98)}
+
+.card-icon{
+  width:48px;height:48px;border-radius:14px;display:flex;
+  align-items:center;justify-content:center;font-size:24px;margin-bottom:16px;
+}
+.card h3{font-size:17px;font-weight:700;margin-bottom:6px}
+.card .card-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+
+.card-meta{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted)}
+.card-meta .lessons-count{
+  background:var(--surface2);padding:3px 10px;border-radius:100px;font-weight:600;
+}
+.card-meta .difficulty{font-weight:600}
+.card-meta .difficulty.beginner{color:var(--green)}
+.card-meta .difficulty.intermediate{color:var(--yellow)}
+.card-meta .difficulty.advanced{color:var(--red)}
+
+.card-progress{
+  position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--surface2);
+}
+.card-progress-fill{height:100%;background:var(--accent);border-radius:0 3px 0 0;transition:width .3s}
+
+/* COMING SOON CARD */
+.card.coming-soon{opacity:.5;pointer-events:none}
+.card.coming-soon::after{
+  content:'COMING SOON';position:absolute;top:16px;right:16px;
+  font-size:10px;font-weight:700;letter-spacing:.8px;
+  background:var(--surface3);color:var(--muted);padding:4px 10px;border-radius:100px;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state{
+  text-align:center;padding:60px 24px;color:var(--muted);
+}
+.empty-state .empty-icon{font-size:48px;margin-bottom:12px;opacity:.5}
+.empty-state p{font-size:14px}
+
+/* ===== FOOTER ===== */
+.footer{
+  text-align:center;padding:24px;border-top:1px solid var(--surface2);
+  font-size:12px;color:var(--muted);
+}
+.footer a{color:var(--accent);text-decoration:none}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:600px){
+  .hero{padding:44px 20px 32px}
+  .grid{grid-template-columns:1fr}
+  .stats{gap:20px}
+}
+</style>
+</head>
+<body>
+
+<div class="install-banner" id="installBanner">
+  <div class="install-inner">
+    <p>Install for offline access</p>
+    <button class="install-btn" id="installBtn">Install</button>
+    <button class="install-dismiss" id="installDismiss">&times;</button>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-logo">HC</div>
+  <h1>How to <span>Claude</span></h1>
+  <p>Every AI concept explained like you're learning from a friend. Zero jargon. Real-world examples. Interactive quizzes.</p>
+</div>
+
+<div class="stats" id="stats"></div>
+
+<div class="tabs-wrap">
+  <div class="tabs" id="tabs"></div>
+</div>
+
+<div class="grid-section">
+  <div class="grid" id="grid"></div>
+  <div class="empty-state" id="emptyState" style="display:none">
+    <div class="empty-icon">🚧</div>
+    <p>Lessons for this category are coming soon!</p>
+  </div>
+</div>
+
+<div class="footer">
+  Built by <a href="https://github.com/kittechsix-blip" target="_blank">kittechsix-blip</a> &middot; Powered by learning, not lecturing.
+</div>
+
+<script>
+/* ===== COURSE DATA ===== */
+const courses = [
+  {
+    id: 'claude-code',
+    title: 'Claude Code for Everyone',
+    desc: 'Every Claude Code feature — slash commands, memory, skills, agents, hooks, and more — explained with everyday analogies.',
+    icon: '⚡',
+    iconBg: 'linear-gradient(135deg,#e85d26,#ff8a50)',
+    category: 'claude',
+    difficulty: 'beginner',
+    lessonsCount: 10,
+    estimatedTime: '45 min',
+    url: './lessons/claude-code.html',
+    ready: true
+  },
+  {
+    id: 'claude-chat',
+    title: 'Claude.ai Chat Basics',
+    desc: 'How to have great conversations with Claude — from asking better questions to using projects, artifacts, and styles.',
+    icon: '💬',
+    iconBg: 'linear-gradient(135deg,#60a5fa,#818cf8)',
+    category: 'claude',
+    difficulty: 'beginner',
+    lessonsCount: 8,
+    estimatedTime: '30 min',
+    url: '#',
+    ready: false
+  },
+  {
+    id: 'prompting',
+    title: 'Prompting Like a Pro',
+    desc: 'The art of talking to AI so it actually does what you want — with templates, examples, and common mistakes to avoid.',
+    icon: '🎯',
+    iconBg: 'linear-gradient(135deg,#a78bfa,#c084fc)',
+    category: 'claude',
+    difficulty: 'beginner',
+    lessonsCount: 8,
+    estimatedTime: '35 min',
+    url: '#',
+    ready: false
+  },
+  {
+    id: 'cowork',
+    title: 'Cowork Mode',
+    desc: 'How to use Claude\'s desktop assistant to manage files, automate tasks, and work across your apps — no coding needed.',
+    icon: '🖥️',
+    iconBg: 'linear-gradient(135deg,#2dd4bf,#34d399)',
+    category: 'claude',
+    difficulty: 'intermediate',
+    lessonsCount: 10,
+    estimatedTime: '40 min',
+    url: '#',
+    ready: false
+  },
+  {
+    id: 'mcp-plugins',
+    title: 'MCP & Plugins',
+    desc: 'How Claude connects to your tools — Slack, GitHub, Google Docs, databases — and how plugins extend what it can do.',
+    icon: '🔌',
+    iconBg: 'linear-gradient(135deg,#fbbf24,#f59e0b)',
+    category: 'claude',
+    difficulty: 'intermediate',
+    lessonsCount: 8,
+    estimatedTime: '35 min',
+    url: '#',
+    ready: false
+  },
+  {
+    id: 'api-nondevs',
+    title: 'The Claude API (Simplified)',
+    desc: 'What the API is, why it matters, and how non-developers can understand and even use it with no-code tools.',
+    icon: '🔑',
+    iconBg: 'linear-gradient(135deg,#f472b6,#ec4899)',
+    category: 'claude',
+    difficulty: 'advanced',
+    lessonsCount: 6,
+    estimatedTime: '25 min',
+    url: '#',
+    ready: false
+  },
+  {
+    id: 'ai-concepts',
+    title: 'AI Concepts 101',
+    desc: 'LLMs, tokens, context windows, fine-tuning, RAG — every buzzword explained so you actually understand what people are talking about.',
+    icon: '🧠',
+    iconBg: 'linear-gradient(135deg,#f87171,#ef4444)',
+    category: 'ai',
+    difficulty: 'beginner',
+    lessonsCount: 12,
+    estimatedTime: '50 min',
+    url: '#',
+    ready: false
+  },
+  {
+    id: 'ai-work',
+    title: 'AI at Work',
+    desc: 'Real workflows for real jobs — how marketers, managers, analysts, and creatives are actually using AI day to day.',
+    icon: '💼',
+    iconBg: 'linear-gradient(135deg,#818cf8,#6366f1)',
+    category: 'ai',
+    difficulty: 'beginner',
+    lessonsCount: 10,
+    estimatedTime: '40 min',
+    url: '#',
+    ready: false
+  },
+  {
+    id: 'ai-safety',
+    title: 'AI Safety & Ethics',
+    desc: 'What AI can and can\'t do, where it goes wrong, and how to use it responsibly — explained without the hype or fear.',
+    icon: '🛡️',
+    iconBg: 'linear-gradient(135deg,#34d399,#059669)',
+    category: 'ai',
+    difficulty: 'beginner',
+    lessonsCount: 6,
+    estimatedTime: '25 min',
+    url: '#',
+    ready: false
+  },
+  {
+    id: 'ai-tools',
+    title: 'The AI Tool Landscape',
+    desc: 'A guided tour of what\'s out there beyond Claude — image generators, coding assistants, voice AI, and when to use what.',
+    icon: '🗺️',
+    iconBg: 'linear-gradient(135deg,#fbbf24,#d97706)',
+    category: 'tools',
+    difficulty: 'beginner',
+    lessonsCount: 8,
+    estimatedTime: '30 min',
+    url: '#',
+    ready: false
+  }
+];
+
+const categories = [
+  { id: 'all', label: 'All' },
+  { id: 'claude', label: 'Claude' },
+  { id: 'ai', label: 'AI Concepts' },
+  { id: 'tools', label: 'Tools & Ecosystem' }
+];
+
+/* ===== STATE ===== */
+const STORE = 'htc-app-state';
+let activeCategory = 'all';
+
+function getProgress() {
+  try { return JSON.parse(localStorage.getItem(STORE) || '{}'); } catch(e) { return {}; }
+}
+
+/* ===== RENDER ===== */
+function render() {
+  const progress = getProgress();
+
+  // Stats
+  const totalLessons = courses.reduce((s, c) => s + c.lessonsCount, 0);
+  const readyCourses = courses.filter(c => c.ready).length;
+  const completedLessons = Object.values(progress).reduce((s, p) => s + (p.done || 0), 0);
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><div class="stat-num">${courses.length}</div><div class="stat-label">Topics</div></div>
+    <div class="stat"><div class="stat-num">${totalLessons}</div><div class="stat-label">Lessons</div></div>
+    <div class="stat"><div class="stat-num">${completedLessons}</div><div class="stat-label">Completed</div></div>
+  `;
+
+  // Tabs
+  document.getElementById('tabs').innerHTML = categories.map(cat => {
+    const count = cat.id === 'all' ? courses.length : courses.filter(c => c.category === cat.id).length;
+    return `<button class="tab${activeCategory === cat.id ? ' active' : ''}" onclick="setCategory('${cat.id}')">${cat.label}<span class="tab-count">${count}</span></button>`;
+  }).join('');
+
+  // Grid
+  const filtered = activeCategory === 'all' ? courses : courses.filter(c => c.category === activeCategory);
+  const grid = document.getElementById('grid');
+  const empty = document.getElementById('emptyState');
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  grid.innerHTML = filtered.map(c => {
+    const p = progress[c.id] || {};
+    const pct = c.ready ? Math.round(((p.done || 0) / c.lessonsCount) * 100) : 0;
+    const diffClass = c.difficulty;
+    const diffLabel = c.difficulty.charAt(0).toUpperCase() + c.difficulty.slice(1);
+
+    return `
+      <a class="card${c.ready ? '' : ' coming-soon'}" href="${c.ready ? c.url : '#'}" ${c.ready ? '' : 'tabindex="-1"'}>
+        <div class="card-icon" style="background:${c.iconBg}">${c.icon}</div>
+        <h3>${c.title}</h3>
+        <p class="card-desc">${c.desc}</p>
+        <div class="card-meta">
+          <span class="lessons-count">${c.lessonsCount} lessons</span>
+          <span>${c.estimatedTime}</span>
+          <span class="difficulty ${diffClass}">${diffLabel}</span>
+        </div>
+        ${c.ready ? `<div class="card-progress"><div class="card-progress-fill" style="width:${pct}%"></div></div>` : ''}
+      </a>`;
+  }).join('');
+}
+
+function setCategory(id) {
+  activeCategory = id;
+  render();
+}
+
+/* ===== PWA ===== */
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); deferredPrompt = e;
+  document.getElementById('installBanner').classList.add('show');
+});
+document.getElementById('installBtn').addEventListener('click', () => {
+  if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt.userChoice.then(() => { deferredPrompt = null; document.getElementById('installBanner').classList.remove('show'); }); }
+});
+document.getElementById('installDismiss').addEventListener('click', () => { document.getElementById('installBanner').classList.remove('show'); });
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(() => {});
+}
+
+render();
+</script>
+</body>
+</html>
